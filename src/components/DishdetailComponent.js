@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Card, CardBody, CardImg, CardText, CardTitle, Breadcrumb, BreadcrumbItem, Button, Modal, ModalHeader, ModalBody,Row, Col, Form, FormGroup, Input, Label} from "reactstrap";
 import { Link } from 'react-router-dom';
 import { Control, LocalForm, Errors } from 'react-redux-form';
+import { Loading } from './LoadingComponent';
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
@@ -66,7 +67,7 @@ class CommentForm extends Component{
                   />
                   <Errors
                       className="text-danger"
-                      model=".name"
+                      model=".author"
                       show="touched"
                        messages={{
                          required: 'Required* ',
@@ -159,8 +160,26 @@ function RenderComments({comments, addComment, dishId}){
 }
 
 const  DishDetail = (props) => {
-  if(props.dish)
-  {
+  if (props.isLoading) {
+    return(
+        <div className="container">
+            <div className="row">            
+                <Loading />
+            </div>
+        </div>
+    );
+}
+else if (props.errMess) {
+    return(
+        <div className="container">
+            <div className="row">            
+                <h4>{props.errMess}</h4>
+            </div>
+        </div>
+    );
+}
+else if(props.dish!=null)
+{
     return(
       <div className="container">
         <div className="row">
@@ -187,9 +206,9 @@ const  DishDetail = (props) => {
         </div>
       </div>
     );
-  }
+}
 
-  else
+else
   {
     return null;
   }
