@@ -1,14 +1,15 @@
 import React from 'react';
 import { Breadcrumb, BreadcrumbItem, Card, CardBody, CardHeader, Media } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { baseUrl } from '../shared/baseUrl';
+import { FadeTransform, Fade, Stagger } from 'react-animation-components';
+import { Loading } from './LoadingComponent';
 
 function About(props) {
 
-    const leaders = props.leaders.map((leader) => {
-        return (
-            <RenderLeader leaders={leader} />
-        );
-    });
+    
+    
+    
 
     return(
         <div className="container">
@@ -65,31 +66,63 @@ function About(props) {
                     <h2>Corporate Leadership</h2>
                 </div>
                 <div className="col-12">
-                    <Media list>
-                      {leaders}
+                    <Media list className="mt-5">
+                        <RenderLeader
+                            leaders={props.leaders.leaders}
+                            isLoading={props.leaders.isLoading}
+                            errMess={props.leaders.errMess} 
+                        />
                     </Media>
-                </div>
+            </div>
             </div>
         </div>
     );
 }
 
-function RenderLeader ({leaders}) {
-    return(
-        <div key={leaders.id} className="col-12 mt-5">
-                <Media tag="li">
-                  <Media left middle>
-                      <Media object src={leaders.image} alt={leaders.name} />
-                  </Media>
-                  <Media body className="ml-5">
-                    <Media heading>{leaders.name}</Media>
-                    <Media subheading>{leaders.designation}</Media>
-                    <p></p>
-                    <p>{leaders.description}</p>
-                  </Media>
-                </Media>
-        </div>
-    );
+function RenderLeader ({leaders, isLoading, errMess}) {
+    if (isLoading) 
+    {
+        return (
+            <Loading />
+        );
+    } 
+    else if (errMess) 
+    {
+        return (
+            <h4>{errMess}</h4>
+        );
+    } 
+    else if (leaders) 
+    {
+        return (
+            <Stagger in>
+                {leaders.map(leader => {
+                    return (
+                        <Fade in key={leader.id}>
+                            <Media>
+                                <Media left>
+                                    <Media object src={baseUrl + leader.image} alt={leader.image} />
+                                </Media>
+                                <Media body className="ml-5 mb-5">
+                                    <Media heading >
+                                        {leader.name}
+                                    </Media>
+                                    <Media className="mb-2">
+                                        {leader.designation}
+                                    </Media>
+                                    <Media>
+                                        {leader.description}
+                                    </Media>
+                                </Media>
+                            </Media>
+                        </Fade>)
+                })}
+            </Stagger>
+        );
+    } 
+    else {
+        return (<div></div>)
+    }
 }
 
 export default About;    
