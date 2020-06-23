@@ -26,7 +26,7 @@ class CommentForm extends Component{
 
     handleSubmit(values) {
       this.toggleModal();
-      this.props.addComment(this.props.dishId, values.rating, values.author, values.comment)
+      this.props.postComment(this.props.dishId, values.rating, values.author, values.comment)
 
     }
 
@@ -48,7 +48,7 @@ class CommentForm extends Component{
                 
                 <Row className="form-group">
                  <Label htmlFor="rating">Rating</Label>
-                  <Control.select model=".rating" name="rating" className="form-control" defaultValue="5">
+                  <Control.select model=".rating" id="rating" name="rating" className="form-control" defaultValue="5">
                     <option>1</option>
                     <option>2</option>
                     <option>3</option>
@@ -123,7 +123,7 @@ function RenderDish({dish}) {
   }
   
 }
-function RenderComments({comments, addComment, dishId}){
+function RenderComments({comments, postComment, dishId}){
  if(comments){
   return (
     <div>
@@ -146,7 +146,7 @@ function RenderComments({comments, addComment, dishId}){
             </li>
           );
         })}
-        <CommentForm dishId={dishId} addComment={addComment} />
+        <CommentForm dishId={dishId} postComment={postComment} />
       </ul>
     </div>
   );
@@ -200,7 +200,7 @@ else if(props.dish!=null)
             </div>
             <div className="col-12 col-md-5 m-1">
                 <RenderComments comments={props.comments}
-                addComment={props.addComment}
+                postComment={props.postComment}
                 dishId={props.dish.id}
                />
             </div>
